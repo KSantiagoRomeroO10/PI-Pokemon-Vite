@@ -1,0 +1,19 @@
+.searchName{
+  float: right;
+}
+.inputRequestName, .buttonRequestName{
+  margin: 8px;
+}
+.inputRequestName{
+  padding: 8px;
+  border-radius: 4px;
+  color: black;
+}
+.buttonRequestName{
+  background: #79070a;
+  padding: 8px;
+  border-radius: 4px;
+}
+.buttonRequestName:hover{
+  cursor: pointer;
+}

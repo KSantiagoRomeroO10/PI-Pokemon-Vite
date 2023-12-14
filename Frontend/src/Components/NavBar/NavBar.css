@@ -1,0 +1,21 @@
+.navBar{
+  background-color: #0f0f0fec;
+  height: 50px;
+  padding: 15px;
+}
+
+.name{
+  float: left;
+}
+
+.random{
+  background: #79070a;
+  padding: 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  position: absolute;
+  top: 20px;
+}
+.random:hover{
+  cursor: pointer;
+}

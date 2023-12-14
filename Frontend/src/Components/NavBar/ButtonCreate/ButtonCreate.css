@@ -1,0 +1,10 @@
+.buttonCreate{
+  float: left;
+  background: #79070a;
+  padding: 8px;
+  border-radius: 4px;
+  margin-left: 15px;
+}
+.buttonCreate:hover{
+  cursor: pointer;
+}
