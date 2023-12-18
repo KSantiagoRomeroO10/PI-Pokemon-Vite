@@ -16,6 +16,7 @@ const GetPokemonIdController = async(req, res) => {
 
     const newFormat = {  
       id: apiData.id,
+      nombre: apiData.name,
       imagen: apiData.sprites.other.dream_world.front_default,
       vida: apiData.stats[0].base_stat,
       ataque: apiData.stats[1].base_stat,

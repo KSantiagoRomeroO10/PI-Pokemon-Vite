@@ -5,6 +5,7 @@ import axios from 'axios'
 import NavBar from './Components/NavBar/NavBar'
 import Landing from './Components/Landing/Landing'
 import Cards from './Components/Cards/Cards'
+import Detail from './Components/Detail/Detail'
 
 function App() {
 
@@ -57,12 +58,11 @@ function App() {
       <Routes>
         <Route path='/' element={ <Landing/> }/>
         <Route path='/home' element={ <Cards pokemon={pokemon}/> }/>
+        <Route path='/detail/:id' element={ <Detail/> }/>
         <Route path='/form' element={ <Landing/> }/>
-
-
       </Routes>
     </>
-    )
+  )
 }
 
 export default App
