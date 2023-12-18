@@ -1,13 +1,14 @@
-import Card from './Card/Card'
+import './Cards.css'
+
 import { useState } from 'react'
 
-import './Cards.css'
+import Card from './Card/Card'
 
 const Cards = ({ pokemon,  }) => {
 
   const [currentPage, setCurrentPage] = useState(0)
 
-  const tamaño = 15
+  const tamaño = 12
   let inicio = 0
   let fin = tamaño
 

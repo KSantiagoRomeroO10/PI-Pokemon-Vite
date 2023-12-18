@@ -1,0 +1,10 @@
+.filterPokemon{
+  float: left;
+  background: #79070a;
+  border-radius: 5px;
+}
+
+.filterPokemon button{
+  color: black;
+  margin: 10px;
+}

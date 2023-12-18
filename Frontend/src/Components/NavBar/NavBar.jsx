@@ -1,9 +1,10 @@
 import './NavBar.css'
 
+import { NavLink } from 'react-router-dom'
+
 import SearchName from './SearchName/SearchName'
-import { NavLink } from 'react-router-dom';
-import ButtonCreate from './ButtonCreate/ButtonCreate';
-//
+import ButtonCreate from './ButtonCreate/ButtonCreate'
+
 const Navbar = ({ requestByName, requestAllPokemon }) => {
 
   const handleNavLinkClick = () => {

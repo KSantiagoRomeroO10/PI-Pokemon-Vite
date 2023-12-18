@@ -44,7 +44,7 @@ const GetPokemonController = async(req, res) => {
       }
     }))
   
-    res.status(200).json([...newFormatPokemon, ...dbPokemon])
+    res.status(200).json(['Api: ', ...newFormatPokemon, 'Database: ',...dbPokemon])
 
   }
   catch(error){

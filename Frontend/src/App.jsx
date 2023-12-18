@@ -53,13 +53,19 @@ function App() {
   return (
     <>
       {
-        location.pathname !== '/' && <NavBar requestByName={requestByName} requestAllPokemon={requestAllPokemon} />
+        location.pathname !== '/' && <NavBar 
+          requestByName={requestByName} 
+          requestAllPokemon={requestAllPokemon} 
+          pokemon={pokemon}
+          setPokemon={setPokemon}
+        />
       }
       <Routes>
         <Route path='/' element={ <Landing/> }/>
         <Route path='/home' element={ <Cards pokemon={pokemon}/> }/>
         <Route path='/detail/:id' element={ <Detail/> }/>
         <Route path='/form' element={ <Landing/> }/>
+        {/* <Route path='/filter-order' element={ <Index/> }/> */}
       </Routes>
     </>
   )
