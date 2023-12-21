@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import Card from './Card/Card'
 
-const Cards = ({ pokemon,  }) => {
+const Cards = ({ pokemon }) => {
 
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -33,8 +33,6 @@ const Cards = ({ pokemon,  }) => {
             const currentCards = []
 
             for (let i = 0; i < section.length; i++) {
-
-              console.log(section);
    
               currentCards.push(
                 <Card

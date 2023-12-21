@@ -17,7 +17,7 @@ function App() {
   // http://localhost:3000/get/pokemon/
   // http://localhost:3000/get/pokemon/:id
   // http://localhost:3000/get/name?name=pikcachu
-  // http://localhost:3000/get/type
+  // http://localhost:3000/get/types
   // http://localhost:3000/post/pokemon
 
   const UrlBase = 'http://localhost:3000/get/'
@@ -30,21 +30,22 @@ function App() {
     }
 
     axios.get(`${UrlBase}name?name=${name}`)
-    .then(response => response.data)
-    .then((data) => {
-      setPokemon(data)
-      console.log(data);
-    })
+      .then(response => response.data)
+      .then((data) => {
+        setPokemon(data)
+      })
 
   }
 
   const requestAllPokemon = () => {
     axios.get(`${UrlBase}pokemon`)
-    .then(response => response.data)
-    .then((data) => {
-      setPokemon(data)
-    })
+      .then(response => response.data)
+      .then((data) => {
+        const filteredData = data.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
+        setPokemon(filteredData)
+      })
   }
+  
   
   useEffect(() => {
     requestAllPokemon()
@@ -65,7 +66,6 @@ function App() {
         <Route path='/home' element={ <Cards pokemon={pokemon}/> }/>
         <Route path='/detail/:id' element={ <Detail/> }/>
         <Route path='/form' element={ <Landing/> }/>
-        {/* <Route path='/filter-order' element={ <Index/> }/> */}
       </Routes>
     </>
   )

@@ -1,0 +1,43 @@
+.filterButtons{
+  position: absolute;
+  top: 5%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+}
+.filterButtons p{
+  background: #79070a;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.optionsF{
+  display: none;
+}
+.optionsF.activeF{
+  display: block;
+  position: absolute;
+  top: 28px;
+  left: 75px;
+  width: 150px;
+  background: #0f0f0fec;
+  padding: 15px;
+  border: 2px solid #79070a;
+}
+.optionsF.activeF button{
+  background: #79070a;
+  margin: 10px;
+  padding: 8px;
+  cursor: pointer;
+}
+.optionsF.activeF, .optionsF.activeF button{
+  border-radius: 10px;
+}
+.originFilter{
+  background-color: #79070a;
+  padding: 8px;
+  margin: 5px;
+  width: 125px;
+}
+.optionsF.activeF button{
+  width: 125px;
+}
