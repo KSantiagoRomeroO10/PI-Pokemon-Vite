@@ -1,28 +1,44 @@
 import './NavBar.css'
 
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 import SearchName from './SearchName/SearchName'
 import ButtonCreate from './ButtonCreate/ButtonCreate'
 import Order from './Order/Order'
 import Filter from './Filter/Filter'
 
-const Navbar = ({ requestByName, requestAllPokemon, pokemon, setPokemon }) => {
+import { useDispatch } from 'react-redux'
+
+import { sortFilterAction, orderStateAction, filterStateAction } from '../../redux/actions'
+
+const Navbar = ({ requestByName }) => {
+
+  const dispatch = useDispatch()
+  const location = useLocation()
+
+  const detail = location.pathname.includes('/detail')
 
   const handleNavLinkClick = () => {
-    requestAllPokemon()
+    dispatch(sortFilterAction(null));
+    dispatch(orderStateAction(null));
+    dispatch(filterStateAction(null));
   }
 
   return (
     <header className='navBar'>
-        <NavLink to={`/home`} className='navLink' onClick={handleNavLinkClick}>
-          <h1 className='name'>Pokemon</h1>
-        </NavLink>
-        <ButtonCreate/>
-        <Order pokemon={pokemon} setPokemon={setPokemon}/>
-        <Filter pokemon={pokemon} setPokemon={setPokemon}/>
-        <SearchName requestByName={requestByName}/>
-    </header>
+    <NavLink to={`/home`} className='navLink' onClick={handleNavLinkClick}>
+      <h1 className='name'>Pokemon</h1>
+    </NavLink>
+    <ButtonCreate />
+    {location.pathname !== '/form' && !detail && (
+      <>
+        <Order/>
+        <Filter/>
+      </>
+    )}
+    <SearchName requestByName={requestByName} />
+  </header>
+
   )
   
 }

@@ -1,72 +1,68 @@
 import './Filter.css'
 
 import { useState } from 'react'
-import axios from 'axios'
 
-const Filter = ({setPokemon}) => {
+import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { sortFilterAction, sortFilterFailure, sortPokemonsFun, filterOriginFun, filterStateAction, filterStateFailure } from '../../../redux/actions'
 
-  const [pokemonApiDb, setPokemonApiDb] = useState([])
+const Filter = () => {
+
+  const pokemons = useSelector((state) => state.pokemons)
+  const sFPokemons = useSelector((state) => state.sFPokemons)
+
+  const orderState = useSelector((state) => state.orderState)
+  //const filterState = useSelector((state) => state.filterState)
+
+  const dispatch = useDispatch()
+    
   const [selectedType, setSelectedType] = useState('')
-  
   const [hoverTitleF, setHoverTitleF] = useState(false)
   const [hoverButtonsF, setHoverButtonsF] = useState(false)
 
-  const UrlBase = 'http://localhost:3000/get/'
-
-  const requestAllPokemonApiDb = () => {
-    axios.get(`${UrlBase}pokemon`)
-      .then(response => response.data)
-      .then((data) => {
-        setPokemonApiDb(data)
-      })
-  }
-
-  requestAllPokemonApiDb()
-
-  const origin = (originType) => {
-
-    const pokemonOrigin = []
-    let aux = false
-
-    for (let poke of pokemonApiDb) {
-      if (originType === 'Api') {
-        pokemonOrigin.push(poke)
-        if (poke === 'Database: ') break
-      }
-
-      if (originType === 'DataBase') {
-        if (poke === 'Database: ') aux = true;
-        if (aux) pokemonOrigin.push(poke)
-      }
-    }
+  const origin = (originType, type = null) => {
+    try {
+      const filterPokemons = filterOriginFun(originType, pokemons)
+      // let sortPokemons
+      // if(orderState === 'NA') sortPokemons = sortPokemonsFun(filterPokemons, 'nombre', 'asc')
+      // if(orderState === 'ND') sortPokemons = sortPokemonsFun(filterPokemons, 'nombre', 'desc')
+      // if(orderState === 'AA') sortPokemons = sortPokemonsFun(filterPokemons, 'ataque', 'asc')
+      // if(orderState === 'AD') sortPokemons = sortPokemonsFun(filterPokemons, 'ataque', 'desc')
+      // else sortPokemons = filterPokemons
     
-    setPokemon(pokemonOrigin.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: '))
+      dispatch(sortFilterAction(filterPokemons))
 
-  }
-  const type = (type) => {
-    const pokemonTypes = []
-    if(selectedType === '') pokemonTypes.push(pokemonApiDb)
-    else {
-      for(let poke of pokemonApiDb){
-        if (poke.types && Array.isArray(poke.types)) {
-          poke.types.forEach(pokeType => {
-            if(pokeType === type) pokemonTypes.push(poke)
-          })
+      if(type){
+        if(type === 'all'){
+          console.log('Hay que imprimirlos a todos sin importar su origen.')
         }
+        else{
+          console.log('Filtrar por tipo')
+       }
       }
     }
-    setPokemon(pokemonTypes)
+    catch (error) {
+      dispatch(sortFilterFailure(error.message))
+    }
   }
 
   const handleTypeChange = (event) => {
     const typePoke = event.target.value
     setSelectedType(typePoke)
-    // type(typePoke)
   }
 
   const handleOptionsF = (state) => {
     setHoverTitleF(state)
     setHoverButtonsF(state)
+  }
+
+  const handleCardsState = (letter) => {
+    try {
+      dispatch(filterStateAction(letter))
+    } 
+    catch (error) {
+      dispatch(filterStateFailure(error.message))
+    }
   }
 
   return (
@@ -77,12 +73,12 @@ const Filter = ({setPokemon}) => {
             onMouseLeave={() => handleOptionsF(false)}
       >
 
-        <button onClick={() => origin('Api')}>Api</button>
-        <button onClick={() => origin('DataBase')}>Database</button>
+        <button onClick={() => { origin('Api'); handleCardsState('AP') }}>Api</button>
+        <button onClick={() => { origin('DataBase'); handleCardsState('DB') }}>Database</button>
         
         <label htmlFor="originFilter">Filter by type:</label>
         <select id="originFilter" className='originFilter' onChange={handleTypeChange} value={selectedType}>
-          <option value="">All types</option>
+          <option value="all">All types</option>
           <option value="bug">Bug</option>
           <option value="dark">Dark</option>
           <option value="dragon">Dragon</option>
@@ -105,7 +101,7 @@ const Filter = ({setPokemon}) => {
           <option value="water">Water</option>
         </select>
 
-        <button onClick={() => type(selectedType)}>Aceptar</button>
+        <button onClick={() => { origin('Type', selectedType); handleCardsState('TY') }}>Aceptar</button>
 
       </div>
     </div>
@@ -113,4 +109,12 @@ const Filter = ({setPokemon}) => {
 
 }
 
-export default Filter
+const mapStateToProps = state => ({
+  filterOrigin: state.filterOrigin,
+  errorFilterOrigin: state.errorFilterOrigin
+})
+
+//const mapDispatchToProps = {}
+
+const ConnCardsWithRedux = connect(mapStateToProps, null)(Filter)
+export default ConnCardsWithRedux

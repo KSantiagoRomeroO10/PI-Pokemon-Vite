@@ -1,10 +1,25 @@
 import './Cards.css'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react';
 
 import Card from './Card/Card'
 
-const Cards = ({ pokemon }) => {
+import { connect } from 'react-redux'
+import { fetchAllPokemons } from '../../redux/actions'
+
+import { useSelector } from 'react-redux'
+
+const Cards = ({ fetchAllPokemons }) => {
+
+  const pokemons = useSelector((state) => state.pokemons)
+  const errorPokemons = useSelector((state) => state.errorPokemons)
+  const sFPokemons = useSelector((state) => state.sFPokemons)
+  
+  let pokemonsCards
+  if(Array.isArray(sFPokemons)){
+    pokemonsCards = sFPokemons.length > 0 ? sFPokemons : pokemons
+  }
+  else pokemonsCards = pokemons
 
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -14,9 +29,10 @@ const Cards = ({ pokemon }) => {
 
   const sections = []
 
-  while (inicio < pokemon.length) {
-    let aux = pokemon.slice(inicio, fin)
-    sections.push(aux)
+  while (inicio < pokemonsCards.length) {
+    let aux0 = pokemonsCards.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
+    let aux1 = aux0.slice(inicio, fin)
+    sections.push(aux1)
     inicio += tamaño
     fin += tamaño
   }
@@ -24,6 +40,12 @@ const Cards = ({ pokemon }) => {
   const handleClick = (pageNumber) => {
     setCurrentPage(pageNumber)
   }
+
+  useEffect(() => {
+    fetchAllPokemons()
+  }, [fetchAllPokemons])
+
+  if (errorPokemons) return <div>Error: {errorPokemons}</div>
 
   return (
     <div className='cards'>    
@@ -69,4 +91,14 @@ const Cards = ({ pokemon }) => {
   )
 }
 
-export default Cards
+const mapStateToProps = state => ({
+  pokemons: state.pokemons,
+  errorPokemons: state.errorPokemons
+})
+
+const mapDispatchToProps = {
+  fetchAllPokemons
+}
+
+const ConnCardsWithRedux = connect(mapStateToProps, mapDispatchToProps)(Cards)
+export default ConnCardsWithRedux

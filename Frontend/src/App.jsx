@@ -6,13 +6,12 @@ import NavBar from './Components/NavBar/NavBar'
 import Landing from './Components/Landing/Landing'
 import Cards from './Components/Cards/Cards'
 import Detail from './Components/Detail/Detail'
+import Form from './Components/Form/Form'
 
 function App() {
 
-  const location = useLocation()
-
-  //const [count, setCount] = useState(0)
   const [pokemon, setPokemon] = useState([])
+  const location = useLocation()
 
   // http://localhost:3000/get/pokemon/
   // http://localhost:3000/get/pokemon/:id
@@ -45,10 +44,9 @@ function App() {
         setPokemon(filteredData)
       })
   }
-  
-  
+
   useEffect(() => {
-    requestAllPokemon()
+    requestAllPokemon
   }, [])
 
   return (
@@ -63,9 +61,9 @@ function App() {
       }
       <Routes>
         <Route path='/' element={ <Landing/> }/>
-        <Route path='/home' element={ <Cards pokemon={pokemon}/> }/>
+        <Route path='/home' element={ <Cards/> }/>
         <Route path='/detail/:id' element={ <Detail/> }/>
-        <Route path='/form' element={ <Landing/> }/>
+        <Route path='/form' element={ <Form/> }/>
       </Routes>
     </>
   )

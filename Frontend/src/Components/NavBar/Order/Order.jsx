@@ -2,26 +2,48 @@ import './Order.css'
 
 import { useState } from 'react'
 
-const Order = ({pokemon, setPokemon}) => {
+import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { sortFilterAction, sortFilterFailure, sortPokemonsFun, orderStateAction, orderStateFailure } from '../../../redux/actions'
+
+const Order = () => {
+
+  const dispatch = useDispatch()
+  const pokemons = useSelector((state) => state.pokemons)
+  const sFPokemons = useSelector((state) => state.sFPokemons)
+
+  // const orderState = useSelector((state) => state.orderState)
+  //const filterState = useSelector((state) => state.filterState)
 
   const [hoverTitleO, setHoverTitleO] = useState(false)
   const [hoverButtonsO, setHoverButtonsO] = useState(false)
 
-  const sortPokemons = (key, order) => {
-    const sortedPokemons = [...pokemon].sort((a, b) => {
-      if (order === 'asc') {
-        return a[key] > b[key] ? 1 : -1
-      }
-      else {
-        return a[key] < b[key] ? 1 : -1
-      }
-    })
-    setPokemon(sortedPokemons)
+  let pokemonsfinal
+  if(Array.isArray(sFPokemons)) pokemonsfinal = sFPokemons.length ? sFPokemons : pokemons
+  else pokemonsfinal = pokemons
+  
+  const handleSortPokemons = (key, order) => {
+    try {
+      const sortedPokemons = sortPokemonsFun(pokemonsfinal, key, order)
+      dispatch(sortFilterAction(sortedPokemons))
+    } 
+    catch (error) {
+      dispatch(sortFilterFailure(error.message))
+    }
   }
   
   const handleOptionsO = (state) => {
     setHoverTitleO(state)
     setHoverButtonsO(state)
+  }
+
+  const handleCardsState = (letter) => {
+    try {
+      dispatch(orderStateAction(letter))
+    } 
+    catch (error) {
+      dispatch(orderStateFailure(error.message))
+    } 
   }
   
   return(
@@ -31,14 +53,22 @@ const Order = ({pokemon, setPokemon}) => {
             onMouseEnter={() => handleOptionsO(true)} 
             onMouseLeave={() => handleOptionsO(false)}
       >
-        <button onClick={() => sortPokemons('nombre', 'asc')}>Sort by Name (Asc)</button>
-        <button onClick={() => sortPokemons('nombre', 'desc')}>Sort by Name (Desc)</button>
-        <button onClick={() => sortPokemons('ataque', 'asc')}>Sort by Attack (Asc)</button>
-        <button onClick={() => sortPokemons('ataque', 'desc')}>Sort by Attack (Desc)</button>
+        <button onClick={() => { handleSortPokemons('nombre', 'asc'); handleCardsState('NA') }}>Sort by Name (Asc)</button>
+        <button onClick={() => { handleSortPokemons('nombre', 'desc'); handleCardsState('ND') }}>Sort by Name (Desc)</button>
+        <button onClick={() => { handleSortPokemons('ataque', 'asc'); handleCardsState('AA') }}>Sort by Attack (Asc)</button>
+        <button onClick={() => { handleSortPokemons('ataque', 'desc'); handleCardsState('AD') }}>Sort by Attack (Desc)</button>
       </div>
     </div>
   )
 
 }
 
-export default Order
+const mapStateToProps = state => ({
+  sortPokemons: state.sortPokemons,
+  errorSort: state.errorSort
+})
+
+//const mapDispatchToProps = {}
+
+const ConnCardsWithRedux = connect(mapStateToProps, null)(Order)
+export default ConnCardsWithRedux

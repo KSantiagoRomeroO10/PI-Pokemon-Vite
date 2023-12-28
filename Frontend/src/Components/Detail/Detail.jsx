@@ -18,7 +18,6 @@ const Detail = () =>{
     .then(response => response.data)
     .then((data) => {
        if (data) {
-          console.log(data)
           setPokemon(data)
        }
        else {
@@ -39,7 +38,7 @@ const Detail = () =>{
       <div className='divImg'>
         <img src={pokemon.imagen} alt='Error no hay imagen.' className='image'/>
       </div>
-      <div className='content'>
+      <div className='contentDetail'>
         <p><span className='title'>Id:</span> {id}</p>
         <br />
         <p><span className='title'>Nombre:</span> {pokemon?.nombre}</p>

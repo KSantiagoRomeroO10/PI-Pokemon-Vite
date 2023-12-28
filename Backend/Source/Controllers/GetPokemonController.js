@@ -22,7 +22,8 @@ const GetPokemonController = async(req, res) => {
 
     // }
 
-    const cantidadPokemons = 50
+    //1302
+    const cantidadPokemons = 60
 
     const apiResponse= await axios.get(`${process.env.API_URL}?offset=0&limit=${cantidadPokemons}`)
     const apiResponseAllPage = apiResponse.data.results

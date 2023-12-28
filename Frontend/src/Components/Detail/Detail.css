@@ -9,18 +9,20 @@
 .divImg{
   border-radius: 5px;
   width: 60%;
-  background-color: #0f0f0fec;
+  background-color: #0f0f0f;
   padding: 5px;
 }
 
 .image{
-  width: 60%;
+  width: 80%;
 }
 
-.content{
+.contentDetail{
   border-radius: 5px;
   text-align: left;
-  width: 100%;
+  width: 80%;
+  background-color: #0f0f0f;
+  padding: 20px;
 }
 
 .title{

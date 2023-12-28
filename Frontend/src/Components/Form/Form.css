@@ -1,0 +1,49 @@
+.form{
+  width: 600px;
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background-color: #0f0f0fec;
+  padding: 50px;
+  border-radius: 5px;
+  border: solid #79070a 2px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.buttonCreateForm{
+  background-color: grey;
+  width: 250px;
+  margin: auto;
+}
+.tittle, .buttonCreateForm, .registrado{
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.form input{
+  color: black;
+}
+.form input, .typePokemon, .buttonTypes{
+  margin: 15px;
+  padding: 5px;
+  border-radius: 3px;
+}
+.typePokemon, .buttonTypes{
+  background-color: #79070a;
+  cursor: pointer;
+}
+.typePokemon, .buttonTypes, .buttonCreateForm{
+  padding: 10px;
+  border-radius: 5px;
+}
+.types, .registrado{
+  color: green;
+}
+.nothing, .errorForm{
+  color: red;
+}
+.buttonCreateForm.buttonActive{
+  background-color: #79070a;
+  cursor: pointer;
+}
