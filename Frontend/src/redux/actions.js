@@ -47,53 +47,63 @@ export const sortFilterFailure = (errorSFPokemons) => ({
 })
 
 export const sortPokemonsFun = (pokemons, key, order) => {
-
   try{
-    if (!pokemons || !Array.isArray(pokemons)) {
-      throw new Error('Pokemons is not a valid array.')
-    }
+    pokemons = pokemons.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
     const sortedPokemons = [...pokemons].sort((a, b) => {
-      if (order === 'asc') {
-        return a[key] > b[key] ? 1 : -1
+      if(key === 'nombre'){
+        if (order === 'asc') {
+          return a[key].toLowerCase() > b[key].toLowerCase() ? 1 : -1
+        }
+        if(order === 'des'){
+          return a[key].toLowerCase() < b[key].toLowerCase() ? 1 : -1
+        }
       }
-      else {
-        return a[key] < b[key] ? 1 : -1
+      if(key === 'ataque'){
+        if (order === 'asc') {
+          return a[key] > b[key] ? 1 : -1
+        }
+        else if(order === 'des'){
+          return a[key] < b[key] ? 1 : -1
+        }
       }
     })
     return sortedPokemons
   }  
   catch (error) {
-    throw new Error(`Error sorting Pokemons: ${error.message}`)
+    return 'Error sort pokemons: ' + error.message
   }
-
 }
 
-export const filterOriginFun = (originType, pokemons) => {
-
+export const filterOriginFun = (pokemons, originType, type = null) => {
   try {
-
     const pokemonOrigin = []
-    let aux = false
+    let auxDB = false
   
-    for (let poke of pokemons) {
-      if (originType === 'Api') {
+    for(let poke of pokemons) {
+      if(originType === 'Api') {
         pokemonOrigin.push(poke)
-        if (poke === 'Database: ') break
+        if(poke === 'Database: ') break
       }
-  
-      if (originType === 'DataBase') {
-        if (poke === 'Database: ') aux = true
-        if (aux) pokemonOrigin.push(poke)
+      if (originType === 'DB') {
+        if(poke === 'Database: ') auxDB = true
+        if(auxDB) pokemonOrigin.push(poke)
       }
     }
-    const resultado = pokemonOrigin.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
-    if (resultado.length) return resultado
+    if(pokemonOrigin) return pokemonOrigin.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
     else 'No existen pokemones'
+    // Filtrar por type
+    if(type){
+      if(type === 'all'){
+        console.log('Hay que imprimirlos a todos sin importar su origen.')
+      }
+      else{
+        console.log('Filtrar por tipo')
+     }
+    }
   }
   catch (error) {
-    throw new Error(`Error filter Pokemons: ${error.message}`)
+    return 'Error filters pokemons: '+error.message
   }
-
 }
  
 // Order estados de control
@@ -120,4 +130,17 @@ export const filterStateAction = (filterState) => ({
 export const filterStateFailure = (errorFilterState) => ({
   type: FILTER_STATE_FAILURE,
   payload: errorFilterState
+})
+
+// Type
+export const TYPES_ARRAY = 'TYPES_ARRAY'
+export const TYPES_ARRAY_FAILURE = 'TYPES_ARRAY_FAILURE'
+
+export const typeAction = (typeValue) => ({
+  type: TYPES_ARRAY,
+  payload: typeValue
+})
+export const typeFailure = (errorTypeValue) => ({
+  type: TYPES_ARRAY_FAILURE,
+  payload: errorTypeValue
 })

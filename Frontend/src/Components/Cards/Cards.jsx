@@ -4,17 +4,55 @@ import { useState, useEffect } from 'react';
 
 import Card from './Card/Card'
 
-import { connect } from 'react-redux'
-import { fetchAllPokemons } from '../../redux/actions'
+import { fetchAllPokemons, sortPokemonsFun, filterOriginFun, sortFilterAction } from '../../redux/actions'
 
-import { useSelector } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 
-const Cards = ({ fetchAllPokemons }) => {
+const Cards = ({fetchAllPokemons}) => {
 
   const pokemons = useSelector((state) => state.pokemons)
   const errorPokemons = useSelector((state) => state.errorPokemons)
   const sFPokemons = useSelector((state) => state.sFPokemons)
+
+  const filterState = useSelector((state) => state.filterState)
+  const orderState = useSelector((state) => state.orderState)
+  // const errorOrderState = useSelector((state) => state.errorOrderState)
+  const typeValue = useSelector((state) => state.typeValue)
+  // const errorFilterState = useSelector((state) => state.errorFilterState)
   
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+
+    fetchAllPokemons()
+
+    let filteredPokemons
+
+    if(filterState === 'AP') filteredPokemons = filterOriginFun(pokemons, 'Api')
+    if(filterState === 'DB') filteredPokemons = filterOriginFun(pokemons, 'DB')
+    if(filterState === 'TY') filteredPokemons = filterOriginFun(pokemons, null, typeValue)
+    if(!filterState) filteredPokemons = null
+
+    let filterAndOrder
+    if(filteredPokemons){
+      if(orderState === 'NA') filterAndOrder = sortPokemonsFun(filteredPokemons, 'nombre', 'asc')
+      if(orderState === 'ND') filterAndOrder = sortPokemonsFun(filteredPokemons, 'nombre', 'des')
+      if(orderState === 'AA') filterAndOrder = sortPokemonsFun(filteredPokemons, 'ataque', 'asc')
+      if(orderState === 'AD') filterAndOrder = sortPokemonsFun(filteredPokemons, 'ataque', 'des')
+      if(!orderState) filterAndOrder = filteredPokemons
+    }
+    else if(!filteredPokemons){
+      if(orderState === 'NA') filterAndOrder = sortPokemonsFun(pokemons, 'nombre', 'asc')
+      if(orderState === 'ND') filterAndOrder = sortPokemonsFun(pokemons, 'nombre', 'des')
+      if(orderState === 'AA') filterAndOrder = sortPokemonsFun(pokemons, 'ataque', 'asc')
+      if(orderState === 'AD') filterAndOrder = sortPokemonsFun(pokemons, 'ataque', 'des')
+      if(!orderState) filterAndOrder = pokemons
+    }
+
+    dispatch(sortFilterAction(filterAndOrder))
+
+  }, [fetchAllPokemons, filterState, orderState, typeValue])
+
   let pokemonsCards
   if(Array.isArray(sFPokemons)){
     pokemonsCards = sFPokemons.length > 0 ? sFPokemons : pokemons
@@ -40,10 +78,6 @@ const Cards = ({ fetchAllPokemons }) => {
   const handleClick = (pageNumber) => {
     setCurrentPage(pageNumber)
   }
-
-  useEffect(() => {
-    fetchAllPokemons()
-  }, [fetchAllPokemons])
 
   if (errorPokemons) return <div>Error: {errorPokemons}</div>
 
@@ -91,14 +125,11 @@ const Cards = ({ fetchAllPokemons }) => {
   )
 }
 
-const mapStateToProps = state => ({
-  pokemons: state.pokemons,
-  errorPokemons: state.errorPokemons
-})
+// const mapStateToProps = state => ({})
 
 const mapDispatchToProps = {
   fetchAllPokemons
 }
 
-const ConnCardsWithRedux = connect(mapStateToProps, mapDispatchToProps)(Cards)
+const ConnCardsWithRedux = connect(null, mapDispatchToProps)(Cards)
 export default ConnCardsWithRedux
