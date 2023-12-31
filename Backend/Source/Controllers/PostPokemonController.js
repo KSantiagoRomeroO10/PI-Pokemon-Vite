@@ -10,43 +10,51 @@ const PostPokemonController = async (req, res) => {
 
   try {
 
-    const apiResponse = await axios.get(`${process.env.API_URL}?key=${process.env.API_KEY}`)
-    let maxIdPokemon
+    const existingPokemon = await Pokemon.findOne({ where: { nombre: nombre } })
 
-    await Pokemon.max('id')
-    .then(max => {
-      if(max) maxIdPokemon = max
-      else maxIdPokemon = apiResponse.data.count
-      console.log(maxIdPokemon)
-    })
-    .catch(error => {
-      console.log(error);
-    })
-
-    const newPokemon = await Pokemon.create({
-        id: maxIdPokemon+1,
-        nombre,
-        imagen,
-        vida,
-        ataque,
-        defensa,
-        velocidad,
-        altura,
-        peso
-      }
-    )
-
-    if (type && type.length > 0) {
-      for (const typeName of type) {
-        let type = await Type.findOne({ where: { nombre: typeName } })
-        if (!type) {
-          type = await Type.create({ nombre: typeName })
-        }
-        await newPokemon.addType(type)
-      }
+    if (existingPokemon) {
+      return res.status(400).json({ mensaje: 'El Pokemon ya existe, no se registrará nuevamente.' });
     }
+    else{
 
-    res.status(201).json({ mensaje: 'Pokemon created succesful.'})
+      let maxIdPokemon = 1025
+
+      await Pokemon.max('id')
+      .then(max => {
+        if(max) maxIdPokemon = max
+        console.log(maxIdPokemon)
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
+      const newPokemon = await Pokemon.create({
+          id: maxIdPokemon+1,
+          nombre,
+          imagen,
+          vida,
+          ataque,
+          defensa,
+          velocidad,
+          altura,
+          peso
+        }
+      )
+
+      if (type && type.length > 0) {
+        for (const typeName of type) {
+          let type = await Type.findOne({ where: { nombre: typeName } })
+          if (!type) {
+            type = await Type.create({ nombre: typeName })
+          }
+          await newPokemon.addType(type)
+        }
+      }
+
+      res.status(201).json({ mensaje: 'Pokemon created succesful.'})
+
+    }
+    
   } 
   catch (error) {
     res.status(500).json({ 
@@ -60,15 +68,13 @@ module.exports = PostPokemonController
 
 // para registar mediante esta API, crea los teams si no existen
 // {
-//   "nombre": "Charizard",
-//   "imagen": "https://example.com/charizard.png",
-//   "vida": 78,
-//   "ataque": 84,
-//   "defensa": 78,
-//   "velocidad": 100,
-//   "altura": 1.7,
-//   "peso": 90.5,
-//   "type": ["Fire", "Flying"]
+//   "nombre": "Pikachu",
+//   "imagen": "pikachu.jpg",
+//   "vida": 50,
+//   "ataque": 40,
+//   "defensa": 35,
+//   "velocidad": 60,
+//   "altura": 0.4,
+//   "peso": 6,
+//   "type": ["Electric"]
 // }
-
-

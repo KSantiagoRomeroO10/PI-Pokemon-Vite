@@ -4,12 +4,12 @@ const Validations = () => {
 
   const [errorNombre, setErrorNombre] = useState('') // String
   const [errorImagen, setErrorImagen] = useState('') // String
-  const [errorVida, setErrorVida] = useState('') // Integer
-  const [errorAtaque, setErrorAtaque] = useState('') // Integer
-  const [errorDefensa, setErrorDefensa] = useState('') // Integer
-  const [errorVelocidad, setErrorVelocidad] = useState('') // Integer
-  const [errorAltura, setErrorAltura] = useState('') // Decimal
-  const [errorPeso, setErrorPeso] = useState('') // Decimal
+  const [errorVida, setErrorVida] = useState(null) // Integer
+  const [errorAtaque, setErrorAtaque] = useState(null) // Integer
+  const [errorDefensa, setErrorDefensa] = useState(null) // Integer
+  const [errorVelocidad, setErrorVelocidad] = useState(null) // Integer
+  const [errorAltura, setErrorAltura] = useState(null) // Decimal
+  const [errorPeso, setErrorPeso] = useState(null) // Decimal
 
   const minimo1 = (string) => {
     return string.length >= 1
@@ -32,8 +32,8 @@ const Validations = () => {
   }
 
   const formatoUrl = (url) => {
-    const regexURL = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+)\.([a-zA-Z]{2,})(\/\S*)?$/;
-    return regexURL.test(url);
+    if(url.length >= 10) return true
+    else return false
   }
 
   const handleNombreVali = (nombre) => {
@@ -42,7 +42,7 @@ const Validations = () => {
   }
 
   const handleImagenVali = (imagen) => {
-    if(!formatoUrl(imagen)) setErrorImagen('Solo se aceptan formato de URL.')
+    if(!formatoUrl(imagen)) setErrorImagen('Debe tener almenos 10 carácteres.')
     else setErrorImagen('')
   }
 

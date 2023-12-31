@@ -44,3 +44,9 @@
   background-color: #79070a;
 }
 
+.error{
+  color: red;
+  margin: 30px;
+  padding: 10px;
+}
+

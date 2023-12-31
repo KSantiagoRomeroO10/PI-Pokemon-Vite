@@ -1,30 +1,38 @@
 import './Cards.css'
-
-import { useState, useEffect } from 'react';
-
 import Card from './Card/Card'
 
-import { fetchAllPokemons, sortPokemonsFun, filterOriginFun, sortFilterAction } from '../../redux/actions'
-
+import { useState, useEffect } from 'react'
 import { connect, useSelector, useDispatch } from 'react-redux'
+
+import { fetchAllPokemons, sortPokemonsFun, filterOriginFun, sortFilterAction } from '../../redux/actions'
 
 const Cards = ({fetchAllPokemons}) => {
 
   const pokemons = useSelector((state) => state.pokemons)
   const errorPokemons = useSelector((state) => state.errorPokemons)
+
   const sFPokemons = useSelector((state) => state.sFPokemons)
+  const errorSFPokemons = useSelector((state) => state.errorSFPokemons)
 
   const filterState = useSelector((state) => state.filterState)
+  const errorFilterState = useSelector((state) => state.errorFilterState)
+
   const orderState = useSelector((state) => state.orderState)
-  // const errorOrderState = useSelector((state) => state.errorOrderState)
+  const errorOrderState = useSelector((state) => state.errorOrderState)
+
   const typeValue = useSelector((state) => state.typeValue)
-  // const errorFilterState = useSelector((state) => state.errorFilterState)
-  
+  const errorTypeValue = useSelector((state) => state.errorTypeValue)
+
   const dispatch = useDispatch()
+
+  const fetchAllPkemonsAsync = async () => {
+    await fetchAllPokemons()
+  }
 
   useEffect(() => {
 
-    fetchAllPokemons()
+    // Llama a fetchAllPokemons, que es una acción asíncrona gracias a Redux Thunk
+    fetchAllPkemonsAsync()
 
     let filteredPokemons
 
@@ -32,6 +40,8 @@ const Cards = ({fetchAllPokemons}) => {
     if(filterState === 'DB') filteredPokemons = filterOriginFun(pokemons, 'DB')
     if(filterState === 'TY') filteredPokemons = filterOriginFun(pokemons, null, typeValue)
     if(!filterState) filteredPokemons = null
+
+    console.log(filterOriginFun(pokemons, null, typeValue));
 
     let filterAndOrder
     if(filteredPokemons){
@@ -49,9 +59,9 @@ const Cards = ({fetchAllPokemons}) => {
       if(!orderState) filterAndOrder = pokemons
     }
 
-    dispatch(sortFilterAction(filterAndOrder))
+    dispatch(sortFilterAction(filterAndOrder))    
 
-  }, [fetchAllPokemons, filterState, orderState, typeValue])
+  }, [fetchAllPokemons, filterState, orderState, typeValue, pokemons])
 
   let pokemonsCards
   if(Array.isArray(sFPokemons)){
@@ -79,7 +89,11 @@ const Cards = ({fetchAllPokemons}) => {
     setCurrentPage(pageNumber)
   }
 
-  if (errorPokemons) return <div>Error: {errorPokemons}</div>
+  if (errorPokemons) return <div className='error'>Error: {errorPokemons}</div>
+  if (errorFilterState) return <div className='error'>Error: {errorFilterState}</div>
+  if (errorOrderState) return <div className='error'>Error: {errorOrderState}</div>
+  if (errorSFPokemons) return <div className='error'>Error: {errorSFPokemons}</div>
+  if (errorTypeValue) return <div className='error'>Error: {errorTypeValue}</div>
 
   return (
     <div className='cards'>    
@@ -130,6 +144,9 @@ const Cards = ({fetchAllPokemons}) => {
 const mapDispatchToProps = {
   fetchAllPokemons
 }
+
+// Mapeamos la función con el fin de: Esto asegura que estás interactuando correctamente con el flujo de datos de 
+// Redux y permitiendo que React Redux gestione las actualizaciones del estado de manera adecuada.
 
 const ConnCardsWithRedux = connect(null, mapDispatchToProps)(Cards)
 export default ConnCardsWithRedux

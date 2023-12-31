@@ -76,28 +76,37 @@ export const sortPokemonsFun = (pokemons, key, order) => {
 
 export const filterOriginFun = (pokemons, originType, type = null) => {
   try {
-    const pokemonOrigin = []
-    let auxDB = false
-  
-    for(let poke of pokemons) {
-      if(originType === 'Api') {
-        pokemonOrigin.push(poke)
-        if(poke === 'Database: ') break
+
+    const pokemons2 = pokemons.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
+
+    if(!type){
+
+      const pokemonOrigin = []
+      let auxDB = false
+    
+      for(let poke of pokemons2) {
+        if(originType === 'Api') {
+          pokemonOrigin.push(poke)
+          if(poke === 'Database: ') break
+        }
+        if (originType === 'DB') {
+          if(poke === 'Database: ') auxDB = true
+          if(auxDB) pokemonOrigin.push(poke)
+        }
       }
-      if (originType === 'DB') {
-        if(poke === 'Database: ') auxDB = true
-        if(auxDB) pokemonOrigin.push(poke)
-      }
-    }
-    if(pokemonOrigin) return pokemonOrigin.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
-    else 'No existen pokemones'
+      if(pokemonOrigin) return pokemonOrigin.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
+      else 'No existen pokemones'
+
+    }   
+    
     // Filtrar por type
     if(type){
       if(type === 'all'){
-        console.log('Hay que imprimirlos a todos sin importar su origen.')
+        return pokemons2
       }
       else{
-        console.log('Filtrar por tipo')
+        console.log(pokemons2.filter(pokemon => pokemon.types.includes(type)))
+        return pokemons2.filter(pokemon => pokemon.types.includes(type))
      }
     }
   }

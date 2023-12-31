@@ -6,7 +6,23 @@ const { Type } = require('../Models/Index')
 
 const GetPokemonController = async(req, res) => {
   try{
-    const dbPokemon = await Pokemon.findAll({include: Type})    
+    const dbPokemon = await Pokemon.findAll({include: Type})
+    const newFormatDB = dbPokemon.map((pokemonDB) => {
+      const typesDB = pokemonDB.Types.map(type => type.nombre)
+      return{
+        id: pokemonDB.id,
+        nombre: pokemonDB.nombre,
+        imagen: pokemonDB.imagen,
+        vida: pokemonDB.vida,
+        ataque: pokemonDB.ataque,
+        defensa: pokemonDB.defensa,
+        velocidad: pokemonDB.velocidad,
+        altura: pokemonDB.altura,
+        peso: pokemonDB.peso,
+        types: typesDB
+      } 
+    })
+
 
     // let pages = true
     // let numberPage = 0
@@ -26,9 +42,9 @@ const GetPokemonController = async(req, res) => {
     const cantidadPokemons = 60
 
     const apiResponse= await axios.get(`${process.env.API_URL}?offset=0&limit=${cantidadPokemons}`)
-    const apiResponseAllPage = apiResponse.data.results
+    const apiResponseResults = apiResponse.data.results
     
-    const newFormatPokemon = await Promise.all(apiResponseAllPage.map(async (pokemon) => {
+    const newFormatPokemon = await Promise.all(apiResponseResults.map(async (pokemon) => {
       const apiResponseUrl = await axios.get(pokemon.url)
       const types = apiResponseUrl.data.types.map(type => type.type.name)
       return {
@@ -45,7 +61,7 @@ const GetPokemonController = async(req, res) => {
       }
     }))
   
-    res.status(200).json(['Api: ', ...newFormatPokemon, 'Database: ',...dbPokemon])
+    res.status(200).json(['Api: ', ...newFormatPokemon, 'Database: ', ...newFormatDB])
 
   }
   catch(error){

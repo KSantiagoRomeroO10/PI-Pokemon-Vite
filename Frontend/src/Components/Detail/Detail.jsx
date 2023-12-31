@@ -11,7 +11,7 @@ const Detail = () =>{
 
   const [pokemon, setPokemon] = useState({})
 
-  const {id} = useParams()  //objeto con la información de la ruta.
+  const { id } = useParams()  //objeto con la información de la ruta.
 
   useEffect(() => {
     axios(`${UrlBase}/${id}`)
@@ -24,6 +24,7 @@ const Detail = () =>{
           window.alert('No hay personajes con ese ID')
        }
     })
+    // Limpiar el estado cuando el componente se desmonta
     return setPokemon({})
   }, [id])
   

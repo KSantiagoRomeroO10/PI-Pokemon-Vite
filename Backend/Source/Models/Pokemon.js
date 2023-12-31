@@ -1,49 +1,71 @@
-const { DataTypes } = require('sequelize')
+const { DataTypes } = require('sequelize') // Se usa para definir los tipos de datos de los atributos de los modelos.
 const sequelize = require('./Connection')
 
 const Pokemon = sequelize.define('Pokemon', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      isInt: true,
+      min: 1 // restricción
+    }
   },
   nombre: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+      len: [1, 20] // Restricción de longitud
+    }
   },
   imagen: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    min: 10
   },
   vida: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      isInt: true
+    }
   },
   ataque: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      isInt: true
+    }
   },
   defensa: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      isInt: true
+    }
   },
   velocidad: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      isInt: true
+    }
   },
   altura: {
-    type: DataTypes.DECIMAL(5, 2),
-    allowNull: false
+    type: DataTypes.DECIMAL(4, 2),
+    allowNull: false,
+    validate: {
+      isDecimal: true
+    }
   },
   peso: {
-    type: DataTypes.DECIMAL(5, 2),
-    allowNull: false
+    type: DataTypes.DECIMAL(4, 2),
+    allowNull: false,
+    validate: {
+      isDecimal: true
+    }
   }
 })
 
 module.exports = Pokemon
-
-
-
-// INSERT INTO public."Pokemons"(id, nombre, imagen, vida, ataque, defensa, velocidad, altura, peso, "createdAt", "updatedAt")
-// VALUES (1, 'Bulbasaur', 'bulbasaur.jpg', 45, 49, 49, 45, 0.7, 6.9, NOW(), NOW());
