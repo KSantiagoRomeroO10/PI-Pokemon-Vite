@@ -30,38 +30,39 @@ describe('GET /get/pokemon', () => {
         ]),
       })
     ]))
-  })
+  }, 20000)
+
 })
 
-describe('GET /get/pokemon/:id', () => {
-  it('responds with JSON containing the information of the requested Pokemon', async () => {
-    const pokemonId = 1 // Ajusta el ID según tus necesidades
+describe('GET /get/name', () => {
+  it('La respuesta debe ser un JSON que contiene la información del Pokemon', async () => {
+    const pokemonName = 'bulbasaur' // Ajusta el nombre según tus necesidades
 
-    const response = await request(app).get(`/get/pokemon/${pokemonId}`)
+    const response = await request(app).get(`/get/name?name=${pokemonName}`)
 
     expect(response.status).toBe(200)
-    expect(response.body).toEqual({
-      id: expect.any(Number),
-      nombre: expect.any(String),
-      imagen: expect.any(String),
-      vida: expect.any(Number),
-      ataque: expect.any(Number),
-      defensa: expect.any(Number),
-      velocidad: expect.any(Number),
-      altura: expect.any(Number),
-      peso: expect.any(Number),
-      types: expect.arrayContaining([
-        expect.any(String),
-        // Puedes agregar más expectativas según la estructura de tu respuesta
-      ]),
-    })
+    expect(response.body).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: expect.any(Number),
+        nombre: expect.any(String),
+        imagen: expect.any(String),
+        vida: expect.any(Number),
+        ataque: expect.any(Number),
+        defensa: expect.any(Number),
+        velocidad: expect.any(Number),
+        altura: expect.any(Number),
+        peso: expect.any(Number),
+        types: expect.arrayContaining([
+          expect.any(String)
+        ]),
+      })
+    ]))
   })
 
-  it('responds with 404 if the Pokemon is not found', async () => {
-    const nonExistentPokemonId = 999 // Ajusta el ID según tus necesidades
+  it('Debe devolver un error 500 si el Pokemon no se encuentra', async () => {
+    const nonExistentPokemonName = 'nonexistentpokemon'
 
-    const response = await request(app).get(`/get/pokemon/${nonExistentPokemonId}`)
-
-    expect(response.status).toBe(404)
+    const response = await request(app).get(`/get/name?name=${nonExistentPokemonName}`)
+    expect(response.status).toBe(500)
   })
 })

@@ -38,6 +38,6 @@ describe('Pokemon Model', () => {
         altura: 'invalid', // Valor no numérico, incumple la restricción de tipo
       })
     ).rejects.toThrow();
-  });
+  })
 
 })
