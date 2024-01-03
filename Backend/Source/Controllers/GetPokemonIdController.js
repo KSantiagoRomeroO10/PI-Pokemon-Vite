@@ -8,6 +8,7 @@ const GetPokemonIdController = async(req, res) => {
   
   try{
 
+    // Desde el request, consulta, obtenemos el id que recibimos por parametro
     const { id } = req.params
 
     if(id >= 1026){

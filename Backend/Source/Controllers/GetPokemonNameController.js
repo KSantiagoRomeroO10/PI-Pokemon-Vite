@@ -10,12 +10,15 @@ const { Op } = require('sequelize')
 const GetPokemonNameController = async (req, res) => {
   try {
     
+    // Desde el request, consulta, obtenemos el nombre que recibimos por parametro
     const { name } = req.query
     
+    // Buscamos todos los pokemones donde el nombre coincida
     const pokemonFromDB = await Pokemon.findAll({
       where: {
         nombre: {
-          [Op.eq]: `%${name}%`
+          [Op.iLike]: `%${name}%` // se usaa Op.iLike para que le sea indiferente las mayúsculas y minúsculas 
+          // [Op.eq]: `%${name}%`
         }
       },
       include: Type

@@ -31,7 +31,7 @@ server.use(cors({
   methods: ['GET', 'POST']
 }))
 
-server.use(express.json())
+server.use(express.json({ limit: '50 mb' }))
 server.use(router)
 
 server.listen(PORT, () => {

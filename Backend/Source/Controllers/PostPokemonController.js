@@ -6,6 +6,7 @@ const { Type } = require('../Models/Index')
 
 const PostPokemonController = async (req, res) => {
 
+  // Desde el request, consulta, obtenemos el varios atributos del pokemon que recibimos por parametro
   const { nombre, imagen, vida, ataque, defensa, velocidad, altura, peso, type } = req.body
 
   try {
@@ -76,5 +77,5 @@ module.exports = PostPokemonController
 //   "velocidad": 60,
 //   "altura": 0.4,
 //   "peso": 6,
-//   "type": ["Electric"]
+//   "type": ["Electric", "Normal"]
 // }

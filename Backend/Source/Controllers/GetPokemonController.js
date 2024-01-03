@@ -1,5 +1,5 @@
 const axios = require('axios')
-require('dotenv').config();
+require('dotenv').config()
 
 const { Pokemon } = require('../Models/Index')
 const { Type } = require('../Models/Index')
@@ -23,27 +23,18 @@ const GetPokemonController = async(req, res) => {
       } 
     })
 
+    // se formatea información ya que en el front no se utiliza createdAt ni updatedAt, y además los tipos, anida objetos 
+    // un objeto por cada tipo, en el front se trabaja un solo array de nombres, no de objetos  
 
-    // let pages = true
-    // let numberPage = 0
-    // const apiResponseAllPage = []
-
-    // while(pages) {
-
-    //   let apiResponse = await axios.get(`${process.env.API_URL}?offset=${numberPage}&limit=20`)
-    //   apiResponseAllPage.push(...apiResponse.data.results)
-    //   numberPage += 20
-
-    //   if(numberPage === 100) pages = false
-
-    // }
-
-    //1302
+    // 1302 limite de pokemones en la api externa
     const cantidadPokemons = 60
 
-    const apiResponse= await axios.get(`${process.env.API_URL}?offset=0&limit=${cantidadPokemons}`)
+    // https://pokeapi.co/api/v2/pokemon/?offset=20&limit=200
+    const apiResponse = await axios.get(`${process.env.API_URL}?offset=0&limit=${cantidadPokemons}`)
     const apiResponseResults = apiResponse.data.results
     
+    // La promesa se utiliza para esperar a que todas las promesas del ma resuelvan, ya que el map devuelve una promesa 
+    // resuelta o no por cada elemento iterado.
     const newFormatPokemon = await Promise.all(apiResponseResults.map(async (pokemon) => {
       const apiResponseUrl = await axios.get(pokemon.url)
       const types = apiResponseUrl.data.types.map(type => type.type.name)
