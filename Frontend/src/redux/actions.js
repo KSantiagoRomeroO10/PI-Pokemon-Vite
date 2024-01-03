@@ -77,14 +77,12 @@ export const sortPokemonsFun = (pokemons, key, order) => {
 export const filterOriginFun = (pokemons, originType, type = null) => {
   try {
 
-    const pokemons2 = pokemons.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
-
     if(!type){
 
       const pokemonOrigin = []
       let auxDB = false
     
-      for(let poke of pokemons2) {
+      for(let poke of pokemons) {
         if(originType === 'Api') {
           pokemonOrigin.push(poke)
           if(poke === 'Database: ') break
@@ -97,15 +95,15 @@ export const filterOriginFun = (pokemons, originType, type = null) => {
       if(pokemonOrigin) return pokemonOrigin.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
       else 'No existen pokemones'
 
-    }   
-    
+    }
+
+    const pokemons2 = pokemons.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
     // Filtrar por type
     if(type){
       if(type === 'all'){
         return pokemons2
       }
       else{
-        console.log(pokemons2.filter(pokemon => pokemon.types.includes(type)))
         return pokemons2.filter(pokemon => pokemon.types.includes(type))
      }
     }

@@ -93,6 +93,7 @@ const StatesHandlers = () => {
     setVelocidad('')
     setAltura('')
     setPeso('')
+    setType('')
     setArrayTypes([])
   }
   return{

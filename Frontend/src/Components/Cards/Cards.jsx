@@ -41,8 +41,6 @@ const Cards = ({fetchAllPokemons}) => {
     if(filterState === 'TY') filteredPokemons = filterOriginFun(pokemons, null, typeValue)
     if(!filterState) filteredPokemons = null
 
-    console.log(filterOriginFun(pokemons, null, typeValue));
-
     let filterAndOrder
     if(filteredPokemons){
       if(orderState === 'NA') filterAndOrder = sortPokemonsFun(filteredPokemons, 'nombre', 'asc')
@@ -61,6 +59,7 @@ const Cards = ({fetchAllPokemons}) => {
 
     dispatch(sortFilterAction(filterAndOrder))    
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchAllPokemons, filterState, orderState, typeValue, pokemons])
 
   let pokemonsCards
