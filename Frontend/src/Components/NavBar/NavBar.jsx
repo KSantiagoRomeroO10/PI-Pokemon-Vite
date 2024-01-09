@@ -1,17 +1,15 @@
 import './NavBar.css'
 
 import { NavLink, useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { sortFilterAction, orderStateAction, filterStateAction, searchNameAction } from '../../redux/actions'
 
 import SearchName from './SearchName/SearchName'
 import ButtonCreate from './ButtonCreate/ButtonCreate'
 import Order from '../Order/Order'
 import Filter from '../Filter/Filter'
 
-import { useDispatch } from 'react-redux'
-
-import { sortFilterAction, orderStateAction, filterStateAction } from '../../redux/actions'
-
-const Navbar = ({ requestByName }) => {
+const Navbar = () => {
 
   const dispatch = useDispatch()
   const location = useLocation()
@@ -22,6 +20,7 @@ const Navbar = ({ requestByName }) => {
     dispatch(sortFilterAction(null))
     dispatch(orderStateAction(null))
     dispatch(filterStateAction(null))
+    dispatch(searchNameAction([]))
   }
 
   return (
@@ -37,7 +36,7 @@ const Navbar = ({ requestByName }) => {
         <Filter/>
       </>
     )}
-    <SearchName requestByName={requestByName} />
+    <SearchName/>
   </header>
 
   )

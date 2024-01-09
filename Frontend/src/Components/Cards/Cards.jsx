@@ -13,6 +13,9 @@ const Cards = ({fetchAllPokemons}) => {
 
   const sFPokemons = useSelector((state) => state.sFPokemons)
   const errorSFPokemons = useSelector((state) => state.errorSFPokemons)
+  
+  const searchName = useSelector((state) => state.searchName)
+  const errorSearchName = useSelector((state) => state.errorSearchName)
 
   const filterState = useSelector((state) => state.filterState)
   const errorFilterState = useSelector((state) => state.errorFilterState)
@@ -32,13 +35,14 @@ const Cards = ({fetchAllPokemons}) => {
   useEffect(() => {
 
     // Llama a fetchAllPokemons, que es una acción asíncrona gracias a Redux Thunk
+
     fetchAllPkemonsAsync()
 
     let filteredPokemons
 
-    if(filterState === 'AP') filteredPokemons = filterOriginFun(pokemons, 'Api')
-    if(filterState === 'DB') filteredPokemons = filterOriginFun(pokemons, 'DB')
-    if(filterState === 'TY') filteredPokemons = filterOriginFun(pokemons, null, typeValue)
+    if(filterState === 'AP') filteredPokemons = filterOriginFun(pokemons, null, 'Api')
+    if(filterState === 'DB') filteredPokemons = filterOriginFun(pokemons, null, 'DB')
+    if(filterState === 'TY') filteredPokemons = filterOriginFun(pokemons, sFPokemons, null, typeValue)
     if(!filterState) filteredPokemons = null
 
     let filterAndOrder
@@ -57,16 +61,15 @@ const Cards = ({fetchAllPokemons}) => {
       if(!orderState) filterAndOrder = pokemons
     }
 
-    dispatch(sortFilterAction(filterAndOrder))    
+    dispatch(sortFilterAction(filterAndOrder))
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchAllPokemons, filterState, orderState, typeValue, pokemons])
+  }, [fetchAllPokemons, filterState, orderState, typeValue])
 
   let pokemonsCards
-  if(Array.isArray(sFPokemons)){
-    pokemonsCards = sFPokemons.length > 0 ? sFPokemons : pokemons
-  }
-  else pokemonsCards = pokemons
+  if(Array.isArray(sFPokemons)) pokemonsCards = sFPokemons.length > 0 ? sFPokemons : searchName
+  else if(Array.isArray(searchName)) pokemonsCards = searchName.length > 0 ? searchName : pokemons
+  //else pokemonsCards = pokemons
 
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -93,6 +96,7 @@ const Cards = ({fetchAllPokemons}) => {
   if (errorOrderState) return <div className='error'>Error: {errorOrderState}</div>
   if (errorSFPokemons) return <div className='error'>Error: {errorSFPokemons}</div>
   if (errorTypeValue) return <div className='error'>Error: {errorTypeValue}</div>
+  if (errorTypeValue) return <div className='error'>Error: {errorSearchName}</div>
 
   return (
     <div className='cards'>    

@@ -74,7 +74,7 @@ export const sortPokemonsFun = (pokemons, key, order) => {
   }
 }
 
-export const filterOriginFun = (pokemons, originType, type = null) => {
+export const filterOriginFun = (pokemons, sFPokemons = null, originType, type = null) => {
   try {
 
     if(!type){
@@ -100,8 +100,11 @@ export const filterOriginFun = (pokemons, originType, type = null) => {
     const pokemons2 = pokemons.filter(pokemon => pokemon !== 'Api: ' && pokemon !== 'Database: ')
     // Filtrar por type
     if(type){
-      if(type === 'all'){
+      if(type === 'all' && sFPokemons === null){
         return pokemons2
+      }
+      else if(type === 'all' && sFPokemons){
+        return sFPokemons.filter(pokemon => pokemon.types.includes(type))
       }
       else{
         return pokemons2.filter(pokemon => pokemon.types.includes(type))
@@ -150,4 +153,17 @@ export const typeAction = (typeValue) => ({
 export const typeFailure = (errorTypeValue) => ({
   type: TYPES_ARRAY_FAILURE,
   payload: errorTypeValue
+})
+
+// Search name
+export const SEARCH_NAME = 'SEARCH_NAME'
+export const SEARCH_NAME_FAILURE = 'SEARCH_NAME_FAILURE'
+
+export const searchNameAction = (searchName) => ({
+  type: SEARCH_NAME,
+  payload: searchName
+})
+export const searchNameFailure = (errorSearchName) => ({
+  type: SEARCH_NAME_FAILURE,
+  payload: errorSearchName
 })

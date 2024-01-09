@@ -1,5 +1,5 @@
 // reducers.js
-import { FETCH_POKEMONS, FETCH_POKEMONS_FAILURE, SORT_FILTER_POKEMONS, SORT_FILTER_POKEMONS_FAILURE, ORDER_STATE, ORDER_STATE_FAILURE, FILTER_STATE, FILTER_STATE_FAILURE, TYPES_ARRAY, TYPES_ARRAY_FAILURE } from './actions'
+import { FETCH_POKEMONS, FETCH_POKEMONS_FAILURE, SORT_FILTER_POKEMONS, SORT_FILTER_POKEMONS_FAILURE, ORDER_STATE, ORDER_STATE_FAILURE, FILTER_STATE, FILTER_STATE_FAILURE, TYPES_ARRAY, TYPES_ARRAY_FAILURE, SEARCH_NAME, SEARCH_NAME_FAILURE } from './actions'
 
 const initialState = {
   pokemons: [],
@@ -11,7 +11,9 @@ const initialState = {
   filterState: null,
   errorFilterState: null,
   typeValue: [],
-  errorTypeValue: null
+  errorTypeValue: null,
+  searchName: [],
+  errorSearchName: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -70,6 +72,17 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         errorTypeValue: action.payload
+      }
+    case SEARCH_NAME:
+      return {
+        ...state,
+        searchName: action.payload,
+        errorSearchName: null
+      }
+    case SEARCH_NAME_FAILURE:
+      return {
+        ...state,
+        errorSearchName: action.payload
       }
     default:
       return state
